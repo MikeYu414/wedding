@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>My Wedding</title>
+    <style type="text/css">
+        html,
+        body {
+            margin: 0%;
+            padding: 0%;
+            background-color: #29454d;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        .box {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            transform-style: preserve-3d;
+            perspective: 2000px;
+        }
+
+        .di {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            height: 200px;
+            width: 200px;
+            transform: translate(-50%, -50%) rotateX(80deg);
+            transform-style: preserve-3d;
+        }
+
+        .z {
+            position: relative;
+            height: 200px;
+            width: 200px;
+            border-radius: 50%;
+            transform-style: preserve-3d;
+        }
+
+        .z span {
+            margin: 0%;
+            position: absolute;
+            top: 0%;
+            left: 25px;
+            height: 200px;
+            width: 150px;
+            border: 2px solid #fd7068;
+            box-sizing: border-box;
+            background-color: #fff;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-size: 10px;
+            line-height: 200px;
+            text-align: center;
+            -webkit-box-reflect: below 10px -webkit-linear-gradient(top, rgba(255, 0, 0, 0), rgba(255, 0, 0, 005));
+            display: flex;
+            justify-content: center;
+        }
+
+        .background {
+            position: fixed;
+            top: 0%;
+            left: 0%;
+            height: 100vh;
+            width: 100vw;
+            z-index: 9999;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            transition: all 1s ease;
+        }
+
+        .preview {
+            height: calc(100vh - 100px);
+            background-color: #fff;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: -25px;
+            top: -5px;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .close:hover {
+            color: #81b6da;
+            cursor: pointer;
+        }
+
+        .previewimg {
+            height: 100%;
+            max-width: 90vw;
+        }
+
+        @keyframes bounce {
+            0% {
+                transform: translate3d(0, 0, 0);
+                text-shadow: #ac8c4cee 0 0 0.05em;
+            }
+
+            100% {
+                transform: translate3d(0, -30px, 0);
+                text-shadow: #ac8c4cee 0 0.1em 0.35em;
+            }
+        }
+
+        .bounce {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font: normal bold 6rem "Product Sans", sans-serif;
+            color: #3cbc12;
+            letter-spacing: 8px;
+            white-space: nowrap;
+            z-index: 1001;
+            position: absolute;
+            top: 20px;
+        }
+
+        .bounce .letter {
+            animation: bounce 0.6s cubic-bezier(0.05, 0, 0.2, 1) infinite alternate;
+            display: inline-block;
+            transform: translate3d(0, 0, 0);
+            margin-top: 0.5em;
+            text-shadow: rgb(255 255 255 / 40%) 0 0 0.05em;
+            font: normal 500 5rem 'Varela Round', sans-serif;
+        }
+
+        .letter:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .letter:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .letter:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .letter:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .letter:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .letter:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        .letter:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+
+        .letter:nth-child(8) {
+            animation-delay: 0.7s;
+        }
+
+        .letter:nth-child(9) {
+            animation-delay: 0.8s;
+        }
+
+        .letter:nth-child(10) {
+            animation-delay: 0.9s;
+        }
+
+        .loader {
+            position: absolute;
+            top: 40%;
+            border-top: 0.3em solid rgba(0, 0, 0, 0.1);
+            border-right: 0.3em solid rgba(0, 0, 0, 0.1);
+            border-bottom: 0.3em solid rgba(0, 0, 0, 0.1);
+            border-left: 0.3em solid #ee2223;
+            -moz-transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            transform: translateY(40%);
+            -moz-animation: loader 600ms infinite linear;
+            -webkit-animation: loader 600ms infinite linear;
+            animation: loader 600ms infinite linear;
+            -moz-transition: all 600ms ease;
+            -o-transition: all 600ms ease;
+            -webkit-transition: all 600ms ease;
+            transition: all 600ms ease;
+            z-index: 9999;
+        }
+
+        .loader,
+        .loader:after {
+            border-radius: 50%;
+            width: 2em;
+            height: 2em;
+        }
+
+        .z p {
+            color: #595959;
+            margin-top: 5px;
+            margin-top: 15px;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+        }
+
+        @keyframes loader {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+                border-left: 0.3em solid #ee2223;
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+                border-left: 0.3em solid #fc4c2f;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .preview {
+                height: auto;
+            }
+
+            .previewimg {
+                height: auto;
+            }
+
+            .close {
+                font-size: 16px;
+                right: -16px;
+                top: -2px;
+            }
+
+            .letter {
+                font-size: 36px !important;
+            }
+        }
+    </style>
+    <script src="./js/jquery.js"></script>
+</head>
+
+<body>
+    <div class="bounce tip">
+        <p class="letter">我</p>
+        <p class="letter">们</p>
+        <p class="letter">的</p>
+        <p class="letter">小</p>
+        <p class="letter">幸</p>
+        <p class="letter">福</p>
+    </div>
+    <div id="background" class="background">
+        <div class="preview">
+            <span id="close" class="close">X</span>
+            <img id="previewimg" class="previewimg" src="">
+        </div>
+    </div>
+    <div class="box">
+        <div class="di">
+            <div class="z">
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+                <span>
+                    <div class="center">
+                        <div class="loader"></div>
+                        <p>Loading...</p>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="index.js"></script>
+
+</html>
